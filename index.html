@@ -37,35 +37,46 @@
         style="display: none"
       >
         <div
-          class="w-full max-h-dvh max-w-sm rounded-t-2xl bg-white p-6 shadow-lg sm:rounded-2xl overflow-auto"
+          class="w-full max-h-[85dvh] max-w-sm rounded-t-2xl bg-white p-6 shadow-lg sm:rounded-2xl overflow-auto flex flex-col"
         >
           <h2 class="mb-4 text-lg font-semibold text-gray-900">
             Select UPI App
           </h2>
 
-          <div class="space-y-3">
-            <template x-for="app in specificApps" :key="app.name">
+          <div class="space-y-3 overflow-y-auto pr-1">
+            <template x-for="app in visibleApps" :key="app.name">
               <a
                 :href="app.scheme"
                 :class="app.color"
-                class="flex w-full items-center justify-center rounded-md px-4 py-3 text-sm font-medium text-white"
+                class="flex w-full items-center justify-center rounded-md px-4 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
                 x-text="'Open with ' + app.name"
               ></a>
             </template>
 
+            <!-- Toggle Button for More Apps -->
+            <button
+              type="button"
+              @click="expanded = !expanded"
+              class="flex w-full items-center justify-center rounded-md border border-dashed border-gray-300 bg-gray-50 px-4 py-3 text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors"
+            >
+              <span
+                x-text="expanded ? 'Show Less Apps' : 'Show All Apps'"
+              ></span>
+            </button>
+
             <!-- Fallback standard button inside overlay -->
             <a
               :href="genericUpi"
-              class="flex w-full items-center justify-center rounded-md border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-900"
+              class="flex w-full items-center justify-center rounded-md border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
             >
               Other UPI Apps
             </a>
           </div>
-          <!--  -->
+
           <button
             type="button"
-            @click="showPayOptions = false"
-            class="mt-6 w-full text-center text-sm text-gray-400 underline hover:text-gray-900"
+            @click="closeDrawer()"
+            class="mt-6 w-full text-center text-sm text-gray-400 underline hover:text-gray-900 shrink-0"
           >
             Cancel
           </button>
@@ -80,15 +91,25 @@
         const am = "200";
         const tn = "hehe";
 
-        // Fixed: Centralizing parameters to fix the undefined runtime errors
         const params = `pa=${pa}&pn=${encodeURIComponent(pn)}&am=${am}&tn=${encodeURIComponent(tn)}`;
 
         return {
           showPayOptions: false,
+          expanded: false, // Controls the list layout depth
           genericUpi: `upi://pay?${params}`,
-
-          // Fixed: Changed package=String; to use the native view action layout for standard choosers
           androidIntent: `intent://pay?${params}#Intent;scheme=upi;action=android.intent.action.VIEW;end`,
+
+          // Computed property that automatically recalculates based on 'expanded' state
+          get visibleApps() {
+            return this.expanded
+              ? this.specificApps
+              : this.specificApps.slice(0, 3);
+          },
+
+          closeDrawer() {
+            this.showPayOptions = false;
+            this.expanded = false; // Reset view on close
+          },
 
           specificApps: [
             {
@@ -134,12 +155,12 @@
             {
               name: "Axis Mobile",
               scheme: `axispay://upi/pay?${params}`,
-              color: "bg-burgundy-700", // Custom/Tailwind configuration or use bg-rose-900
+              color: "bg-rose-900", // Fixed out-of-box Tailwind class substitution
             },
             {
               name: "super.money",
               scheme: `supermoney://upi/pay?${params}`,
-              color: "bg-lime-400",
+              color: "bg-lime-500 text-black", // Added contrast fix for readability
             },
             {
               name: "CRED",
@@ -189,7 +210,6 @@
           ],
           handlePaymentInitiation(e) {
             const ua = navigator.userAgent || navigator.vendor || window.opera;
-            // On desktop or iOS, it opens the UI sheet immediately. On Android, it calls the intent system.
             if (/android/i.test(ua)) {
               e.currentTarget.href = this.androidIntent;
             } else {

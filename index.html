@@ -37,7 +37,7 @@
         style="display: none"
       >
         <div
-          class="w-full max-w-sm rounded-t-2xl bg-white p-6 shadow-lg sm:rounded-2xl"
+          class="w-full max-h-dvh max-w-sm rounded-t-2xl bg-white p-6 shadow-lg sm:rounded-2xl overflow-auto"
         >
           <h2 class="mb-4 text-lg font-semibold text-gray-900">
             Select UPI App
@@ -55,10 +55,10 @@
 
             <!-- Fallback standard button inside overlay -->
             <a
-              href="paytmmp://pay?pa=Q138205743%40ybl&pn=Kawnek%20Mart&am=200&tn=hehe"
+              :href="genericUpi"
               class="flex w-full items-center justify-center rounded-md border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-900"
             >
-              PAY TM
+              Other UPI Apps
             </a>
           </div>
           <!--  -->
@@ -101,12 +101,91 @@
               scheme: `gpay://upi/pay?${params}`,
               color: "bg-blue-500",
             },
-            // {
-            //   name: "Paytm",
-            //   // Fixed: Correctly formatted native Android intent to bypass scanner screen on mobile web
-            //   scheme: `intent://pay?${params}#Intent;scheme=upi;package=net.one97.paytm;end`,
-            //   color: "bg-sky-600",
-            // },
+            {
+              name: "Paytm",
+              scheme: `paytmmp://pay?${params}`,
+              color: "bg-sky-600",
+            },
+            {
+              name: "BHIM UPI",
+              scheme: `bhim://upi/pay?${params}`,
+              color: "bg-orange-500",
+            },
+            {
+              name: "YONO SBI",
+              scheme: `sbiyono://upi/pay?${params}`,
+              color: "bg-cyan-700",
+            },
+            {
+              name: "YONO Lite",
+              scheme: `sbiyonolite://upi/pay?${params}`,
+              color: "bg-cyan-600",
+            },
+            {
+              name: "HDFC MobileBank",
+              scheme: `hdfc://upi/pay?${params}`,
+              color: "bg-blue-800",
+            },
+            {
+              name: "iMobile (ICICI)",
+              scheme: `imobile://upi/pay?${params}`,
+              color: "bg-orange-600",
+            },
+            {
+              name: "Axis Mobile",
+              scheme: `axispay://upi/pay?${params}`,
+              color: "bg-burgundy-700", // Custom/Tailwind configuration or use bg-rose-900
+            },
+            {
+              name: "super.money",
+              scheme: `supermoney://upi/pay?${params}`,
+              color: "bg-lime-400",
+            },
+            {
+              name: "CRED",
+              scheme: `cred://upi/pay?${params}`,
+              color: "bg-black",
+            },
+            {
+              name: "BharatPe",
+              scheme: `bharatpe://upi/pay?${params}`,
+              color: "bg-teal-500",
+            },
+            {
+              name: "Freecharge",
+              scheme: `freecharge://upi/pay?${params}`,
+              color: "bg-orange-400",
+            },
+            {
+              name: "FamApp",
+              scheme: `famapp://upi/pay?${params}`,
+              color: "bg-zinc-900",
+            },
+            {
+              name: "Airtel Thanks",
+              scheme: `airtel://upi/pay?${params}`,
+              color: "bg-red-600",
+            },
+            {
+              name: "PayZapp",
+              scheme: `payzapp://upi/pay?${params}`,
+              color: "bg-blue-600",
+            },
+            {
+              name: "MobiKwik",
+              scheme: `mpay://upi/pay?${params}`,
+              color: "bg-blue-700",
+            },
+            {
+              name: "KreditBee",
+              scheme: `kreditbee://upi/pay?${params}`,
+              color: "bg-yellow-500",
+            },
+            {
+              name: "Navi UPI",
+              scheme: `navi://upi/pay?${params}`,
+              color: "bg-emerald-500",
+            },
           ],
           handlePaymentInitiation(e) {
             const ua = navigator.userAgent || navigator.vendor || window.opera;

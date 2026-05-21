@@ -5,18 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pay ₹200</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.0/dist/index.global.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
   </head>
   <body>
-    <div x-data="payApp()" class="relative flex min-h-screen items-center justify-center bg-white p-4">
-
+    <div
+      x-data="payApp()"
+      class="relative flex min-h-screen items-center justify-center bg-white p-4"
+    >
       <!-- Main Action Button -->
       <a
         :href="genericUpi"
         @click="handlePaymentInitiation($event)"
         class="inline-flex items-center justify-center rounded-md bg-gray-900 px-6 py-3 text-base font-medium text-white transition-colors hover:bg-gray-700"
       >
-        Pay &#8377;200 via UPI
+        Pay &#8377;200 via UPI (paytm)
       </a>
 
       <!-- UPI App Drawer Overlay -->
@@ -29,10 +34,14 @@
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
         class="fixed inset-0 z-50 flex items-end justify-center bg-black/50 sm:items-center"
-        style="display: none;"
+        style="display: none"
       >
-        <div class="w-full max-w-sm rounded-t-2xl bg-white p-6 shadow-lg sm:rounded-2xl">
-          <h2 class="mb-4 text-lg font-semibold text-gray-900">Select UPI App</h2>
+        <div
+          class="w-full max-w-sm rounded-t-2xl bg-white p-6 shadow-lg sm:rounded-2xl"
+        >
+          <h2 class="mb-4 text-lg font-semibold text-gray-900">
+            Select UPI App
+          </h2>
 
           <div class="space-y-3">
             <template x-for="app in specificApps" :key="app.name">
@@ -46,13 +55,13 @@
 
             <!-- Fallback standard button inside overlay -->
             <a
-              :href="genericUpi"
+              href="paytmmp://pay?pa=Q138205743%40ybl&pn=Kawnek%20Mart&am=200&tn=hehe"
               class="flex w-full items-center justify-center rounded-md border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-900"
             >
-              Other UPI App
+              PAY TM
             </a>
           </div>
-
+          <!--  -->
           <button
             type="button"
             @click="showPayOptions = false"
@@ -62,7 +71,6 @@
           </button>
         </div>
       </div>
-
     </div>
 
     <script>
@@ -78,10 +86,10 @@
         return {
           showPayOptions: false,
           genericUpi: `upi://pay?${params}`,
-          
+
           // Fixed: Changed package=String; to use the native view action layout for standard choosers
           androidIntent: `intent://pay?${params}#Intent;scheme=upi;action=android.intent.action.VIEW;end`,
-          
+
           specificApps: [
             {
               name: "PhonePe",
@@ -93,12 +101,12 @@
               scheme: `gpay://upi/pay?${params}`,
               color: "bg-blue-500",
             },
-            {
-              name: "Paytm",
-              // Fixed: Correctly formatted native Android intent to bypass scanner screen on mobile web
-              scheme: `intent://pay?${params}#Intent;scheme=upi;package=net.one97.paytm;end`,
-              color: "bg-sky-600",
-            },
+            // {
+            //   name: "Paytm",
+            //   // Fixed: Correctly formatted native Android intent to bypass scanner screen on mobile web
+            //   scheme: `intent://pay?${params}#Intent;scheme=upi;package=net.one97.paytm;end`,
+            //   color: "bg-sky-600",
+            // },
           ],
           handlePaymentInitiation(e) {
             const ua = navigator.userAgent || navigator.vendor || window.opera;
